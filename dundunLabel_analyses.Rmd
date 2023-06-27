@@ -1,0 +1,643 @@
+---
+title: "dundunLabels"
+author: "Lauren Fink"
+contact: lauren.fink@ae.mpg.de 
+output: html_document
+  toc: True
+---
+
+
+# About
+
+This document steps through all analyses reported in:
+
+Fink, L., Hörster, M., Poeppel, D., Wald-Fuhrmann, M., & Larrouy-Maestri, P. (2023, submitted). Semantic and acoustic features underlying speech-music categories. Pre-print available at: TODO
+
+If using anything from this repository (https://github.com/lkfink/Dundun2_labels), please cite the above paper. 
+
+## Running this code
+As long as you have kept the repository structure intact, and you have all required packages installed on your own machine, you should be able to run this code as is, without changing any file paths. The `here` package is used to make all paths relative to the location of this script. Custom functions on which this script relies can be found in the `functions.R` file. Required packages can be found in the `dependencies.R` file. 
+
+# Preparation 
+Below we load the packages and data that we will use throughout this script. 
+Note that all required packages are listed in the file in this repository called `'dependencies.R'`
+If you want to plot figures inline, set op = 0. If you want to output figures to file, set op = 1. Note that when saving figures to file, sometimes the R graphics device can encounter issues and will need to be reset.
+```{r, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+here::i_am("dundunLabel_analyses.Rmd")
+library(here)
+source(here("dependencies.R"))
+source(here("functions.R"))
+op = 0 # flag if want to save output plots to files (1) or plot inline (0)
+```
+
+## Load data
+Note that we have two sets of data, collected during experiments in which participants were given the labels "music-like" and "speech-like," or "group 1" and "group 2," respectively. Internally, we referred to these datasets as with labels (wl) and no labels (nl).
+```{r}
+# Mean acoustic features for for each stimulus
+af = read.csv(file = here("data/acousticFeatures.csv"), header=TRUE)
+
+# Exp. 1 dataframe containing participants' music / speech grouping for each stimulus
+wl_positions = read.csv(file = here("data/wl_positions.csv"), header=TRUE, sep=",")
+
+# Exp. 2 dataframe containing the position (left or right) where each stimulus placed
+nl_positions = read.csv(file = here("data/nl_positions.csv"), header=TRUE, sep=",")
+
+# Exp. 2: labels participants gave to each box after sorting the stimuli
+nl_labels = read.csv(file = here("data/nl_labels.csv"), header=TRUE, sep = ",")
+```
+
+# Analyses
+
+## Heatmap of raw grouping data
+Below, we plot each participants' placement of each stimulus into the speech / music box (Exp. 1) or right / left box (Exp. 2). There is no sorting of rows or columns. Columns are the same in each plot, according to stimulus name. Each row represents an individual participant. 
+
+We also run a t-test to determine if participants display a bias to place more stimuli into music vs. speech (Exp. 1) or on the left side vs the right side (in Exp. 2). Note that while the side music / speech occurred on was counterbalanced in Exp. 1, there was no such counterbalancing equivalent for Exp. 2.
+Exp. 1: 1 = speech; 2 = music
+Exp. 2: 1 = left; 2 = right
+```{r}
+# Plot and save to file or print in line
+if(op){
+  postscript(here("figures/wl_raw.ps"),  width=10, height=nrow(wl_positions)/10)
+  plotHeatmap(wl_positions, 1)
+  dev.off()
+}else {
+  plotHeatmap(wl_positions, 1)
+}
+
+# Exp. 1
+checkSideBias(wl_positions)
+
+# Plot
+if(op){
+  postscript(here("figures/nl_raw.ps"),  width=10, height=nrow(nl_positions)/10)
+  plotHeatmap(nl_positions, 2)
+  dev.off()
+}else {
+  plotHeatmap(nl_positions, 2)
+}
+
+# Exp. 2
+checkSideBias(nl_positions)
+
+```
+
+## (Dis)similarity in participants' stimulus groupings
+Below, we calculate dissimilarity matrices from participants stimulus groupings and plot the results.
+Warmer colors = greater similarity; cooler colors = more dissimilar. Note that even though there was a significant difference in how many stimuli participants placed in each box, it does not matter for these subsequent analyses as they are only concerned with which stimuli get grouped with which others (regardless of side).
+```{r}
+# Calculate number of times each stimlus placed with each other 
+wl_groupings = get_groupings(wl_positions)
+nl_groupings = get_groupings(nl_positions)
+
+# get distance matrix
+wl_dist <- get_dist(wl_groupings, stand = FALSE, method = "euclidean")
+nl_dist <- get_dist(nl_groupings, stand = FALSE, method = "euclidean")
+
+# Plot distances
+if(op){
+  postscript(here("figures/wl_dissim.ps"),  width=10, height=10)
+  fviz_dist(wl_dist,
+     gradient = list(low = "red", mid = "yellow", high = "blue4"), lab_size = 16, order = FALSE)
+  dev.off()
+} else {
+  fviz_dist(wl_dist,
+     gradient = list(low = "red", mid = "yellow", high = "blue4"), lab_size = 16, order = FALSE)
+}
+
+if(op){
+  postscript(here("figures/nl_dissim.ps"),  width=10, height=10)
+  fviz_dist(nl_dist,
+     gradient = list(low = "red", mid = "yellow", high = "blue4"), lab_size = 16, order = FALSE)
+  dev.off()
+} else {
+  fviz_dist(nl_dist,
+   gradient = list(low = "red", mid = "yellow", high = "blue4"), lab_size = 16, order = FALSE)
+}
+```
+
+## Dendrograms of stimulus groupings 
+From the dissimilarity matrices, we can arrange the stimuli into a dendrogram (again, based on participants' groupings). 
+We do this first for Exp. 1, then Exp. 2
+
+### Exp. 1
+Calculate dendrogram
+```{r}
+# Calculate dendogram
+wl_hc = get_dendro(wl_groupings)
+```
+
+Plot dendrogram
+```{r}
+# Plot dendrogram
+
+# Define custom color palettes
+colorBlind2 <- c("#88CCEE", "#CC6677")
+
+# Plot
+wl_dend = fviz_dend(wl_hc, show_labels = TRUE, palette = colorBlind2, as.ggplot = TRUE, cex = 1.5, color_labels_by_k = TRUE, lwd=2, rect=FALSE)
+if(op){
+  postscript(here("figures/wl_dend.ps"),  width=10, height=10)
+  wl_dend
+  dev.off()
+} else {
+  wl_dend
+}
+```
+
+### Exp. 2
+Calculate dendrogram
+```{r}
+nl_hc = get_dendro(nl_groupings)
+```
+
+Plot dendrogram
+N.B.: In the dendrogram figure of the final paper, the larger branches were recolored manually in Adobe Illustrator to make the distinctions between branches match with the coloring of the word clouds created below. 
+```{r}
+# Define color palette
+colorBlind10 <- c("#DDCC77", "#117733", "#332288", "#AA4499", 
+                             "#44AA99", "#999933", "#882255", "#661100")#, "#6699CC", "#888888")
+
+# Visualize dendrogram
+nl_dend = fviz_dend(nl_hc, show_labels = TRUE, palette = colorBlind10, as.ggplot = TRUE, cex = 1.5, color_labels_by_k = TRUE, lwd=2, rect=FALSE)
+  
+
+if(op){
+  postscript(here("figures/nl_dend.ps"),  width=10, height=10)
+  nl_dend
+  dev.off()
+} else {
+  nl_dend
+}
+```
+
+## PCA of participants' groupings
+### Exp. 1
+```{r}
+# order colors according to cluster. N.B. this is not an optimal way to define colors. Should be able to grab them dynamically, but I cannot figure out where. Have cross-referenced stim labels with colors from previous dendrogram. Can plot labels using: 
+# fviz_cluster(wl_hc, repel=TRUE, addEllipses=FALSE, labelsize = 16, show.clust.cent = FALSE, stand=TRUE, shape = 1, main="") 
+ccols_ordered = colorBlind2[c(2,1)]
+
+# run pca and initialize plot
+wl_pca = fviz_cluster(wl_hc, repel=TRUE, geom="point", pointsize = 12, addEllipses=FALSE, labelsize = 16, show.clust.cent = FALSE, stand=TRUE, shape = 1, main="") 
+
+# define colors based on cluster order and output plot
+if(op){
+  postscript(here("figures/wl_pca.ps"),  width=10, height=10)
+  wl_pca + scale_colour_manual(values = ccols_ordered) + scale_fill_manual(values = ccols_ordered) + theme_classic()
+  dev.off()
+} else {
+  wl_pca + scale_colour_manual(values = ccols_ordered) + scale_fill_manual(values = ccols_ordered) + theme_classic()
+}
+```
+
+### Exp. 2
+```{r}
+# define colors based on cluster order. See note above about this not being optimal syntax
+ccols_ordered = colorBlind10[c(1,3,6,7,8,2,5,4)] 
+# again, I have confirmed that colors match previous dendrogram. I would just use the plot with labels but they overlap too much to fit nicely.
+#nl_pca = fviz_cluster(nl_hc, repel=TRUE, addEllipses=FALSE, labelsize = 16, show.clust.cent = FALSE, stand=TRUE, shape = 1) 
+
+# run pca and initialize plot
+nl_pca = fviz_cluster(nl_hc, repel=TRUE, geom="point", pointsize = 12, addEllipses=FALSE, labelsize = 16, show.clust.cent = FALSE, stand=TRUE, shape = 1) 
+
+# update colors and output plot
+if(op){
+  postscript(here("figures/nl_pca.ps"),  width=10, height=10)
+  nl_pca + scale_colour_manual(values = ccols_ordered) + scale_fill_manual(values = ccols_ordered) + theme_classic() 
+  dev.off()
+} else {
+  nl_pca + scale_colour_manual(values = ccols_ordered) + scale_fill_manual(values = ccols_ordered) + theme_classic() 
+}
+
+```
+
+
+## Acoustic predictors of PCA dimensions
+As can be seen in the correlation matrix below, many of the extracted acoustic features are highly correlated with one another. Therefore, we cannot include all of them in regression models to predict the behavioral data. Additionally, using ~15 features to predict 30 stimulus positions would result in over-fitting. Using PCA solves both of our problems: we reduce dimensionality and remove co-linearity. 
+
+### Correlations among acoustic features
+```{r}
+a = af[,4:20] # subset data to just include features
+chart.Correlation(a)
+```
+
+### PCA of acoustic features
+```{r}
+# fix af stim names for future concatenation with other tables and modeling
+af$stim_cat = as.character(af$stim_cat)
+af$stim_num = as.character(af$stim_num)
+af$stim = paste(af$stim_cat, af$stim_num, sep="")
+
+# do pca on all acoustic features (remove stimulus label cols 1-3)
+res.pca_acoust <- prcomp(af[,-(1:3)], scale = TRUE, center = TRUE)
+
+# plot eigen scree
+fviz_eig(res.pca_acoust, addlabels = TRUE)
+
+# print eigen values for all PCs
+eig.val <- get_eigenvalue(res.pca_acoust)
+eig.val
+```
+In the above plot, we can see a very clear elbow occurs at Dim.5. Also all eigen values after PC4 are less than 1, meaning they explain less variance than an individual variable alone. Therefore, we proceed with PCs 1-4. It is questionable whether we should keep dim. 5 since its eigen value is very near to 1. It is dominated by spectral flux. But given the scree plot, we should not. Just to double check, I have re-run all regression analyses below while keeping dim. 5 and the results do not change (likely because, in the current case, spectral flux is highly correlated with IOI differences, timbre, pitch, etc). 
+
+### Variances explained and the contributions of each feature on each PC
+Print summaries
+Variable meanings:
+var$coord: coordinates of variables to create a scatter plot
+var$cos2: represents the quality of representation for variables on the factor map. It’s calculated as the squared coordinates: var.cos2 = var.coord * var.coord.
+var$contrib: contains the contributions (in percentage) of the variables to the principal components. The contribution of a variable (var) to a given principal component is (in percentage) : (var.cos2 * 100) / (total cos2 of the component).
+```{r}
+# number of PCs to keep
+pcdims = 4 
+
+# Print eigenvalues
+eig.val[c(1:pcdims),]
+
+# change var names to be shorter
+row.names(res.pca_acoust$rotation) = c("intensity mean", "intensity diff", "pitch mean", "pitch diff", "timbre mean", "timbre diff", "IOI mean", "IOI diff", "ratio mean", "ratio diff", "pulse clarity", "spectral flux", "recurrence", "mean recur length", "max recur length", "determinism", "AMS peak")
+  
+# Contributions of each feature to each PC
+res.feats <- get_pca_var(res.pca_acoust)
+#res.feats$contrib[,c(1:pcdims)] # Contributions to the PCs (in percent)
+#res.feats$cos2                   # Quality of representation 
+#res.feats$coord                  # Coordinates
+
+# Write to table
+contribdf = as.data.frame(res.feats$contrib[,c(1:pcdims)])
+round(contribdf, digits=2)
+
+
+# print out loadings of each var for each PC
+# loadings <- res.pca_acoust$rotation
+# loadings[,c(1:4)]
+
+# # Results for individual stims
+# res.ind <- get_pca_ind(res.pca_acoust)
+# res.ind$coord          # Coordinates
+# res.ind$contrib        # Contributions to the PCs
+# res.ind$cos2           # Quality of representation 
+```
+
+Add PC scores to acoustic features data frame 
+For easy reference and future modeling
+```{r}
+# Scores on each PC for each stimulus
+pc_scores = res.pca_acoust$x
+
+# TODO automate.. how to assign col names dynamically in R? 
+# add scores for PCs 1-4 to our AF data frame
+af$PC1 = pc_scores[,1]
+af$PC2 = pc_scores[,2]
+af$PC3 = pc_scores[,3]
+af$PC4 = pc_scores[,4]
+
+# Create new df for easier future modeling
+newaf = subset(af[,c(1,21:24)])
+```
+
+
+### Construct lms to predict behavioral sorting pca coord from acoustic PCs
+We use a custom function here for running models (see functions.R), then we print our results to a nicely formatted APA style table. CIs are estimated via bootstrapping. Model error (mean absolute error) is estimated using cross-validation. We run a model for both experiments and both dimensions of the behavioral stimulus sorting PCA. Stimulus position in the given dimension is the dependent variable and all four acoustic PCs are the predictors. 
+
+#### Exp. 1
+```{r}
+modelRes12 = getModelRes(wl_pca, newaf)
+
+# Print results to nice APA table
+if(op){
+  apa.reg.boot.table(modelRes12[1][[1]], table.number = 2, filename = here("figures/Exp1regX.doc"))
+  apa.reg.boot.table(modelRes12[2][[1]], table.number = 3, filename = here("figures/Exp1regY.doc"))
+} else {
+  print(apa.reg.boot.table(modelRes12[1][[1]], table.number = 2))
+  print(apa.reg.boot.table(modelRes12[2][[1]], table.number = 3))
+}
+```
+
+
+#### Exp. 2
+```{r}
+# Experiment 2 
+modelRes34 = getModelRes(nl_pca, newaf)
+
+# Print results to nice APA table
+if(op){
+  apa.reg.boot.table(modelRes34[1][[1]], table.number = 4, filename = here("figures/Exp2regX.doc"))
+  apa.reg.boot.table(modelRes34[2][[1]], table.number = 5, filename = here("figures/Exp2regY.doc"))
+} else {
+  print(apa.reg.boot.table(modelRes34[1][[1]], table.number = 4))
+  print(apa.reg.boot.table(modelRes34[2][[1]], table.number = 5))
+}
+
+```
+
+
+##### Create biplot for dims 1+3 then 2+3. 
+Based on regression results for Exp. 2
+```{r}
+# change row names to be our stimulus names
+row.names(res.pca_acoust$x) = af$stim
+
+# Create groups
+group <- c(rep("Music", times=15), rep("Speech", times=15))
+
+# Initialize plot for first dim of sorting behavior regression results
+d13 = fviz_pca_biplot(res.pca_acoust, axes = c(1,3), repel = TRUE, pointsize=1, pointshape=21, col.var="black", label="all", labelsize=4, col.ind=group, palette=colorBlind2, addEllipses=TRUE, ellipse.type="confidence", col.circle = "black", title="", invisible="none")
+
+# output plots
+if(op){
+  postscript(here("figures/biplot_d13.ps"),  width=10, height=10)
+  print(d13 + theme_classic())
+  dev.off()
+} else{
+  d13
+}
+```
+
+```{r}
+# Initialize plot for second dim of sorting behavior regression results
+d23 = fviz_pca_biplot(res.pca_acoust, axes = c(2,3), repel = TRUE, pointsize=1, pointshape=21, col.var="black", label="all", labelsize=4, col.ind=group, palette=colorBlind2, addEllipses=TRUE, ellipse.type="confidence", col.circle = "black", title="", invisible="none", max.overlaps = 15)
+
+# output plots
+if(op){
+  postscript(here("figures/biplot_d23.ps"),  width=10, height=10)
+  print(d23 + theme_classic())
+  dev.off()} else{
+  d23
+}
+```
+
+## Text Analyses
+In this section, we analyze participants labels from Experiment 2, as well as the description of the strategy participants used to categorize the stimuli in both experiments. 
+
+### Frequency of individual words in labels
+Create bar chart of frequencies and word clouds
+Need to do a little clean up labels first
+NOTE: wordclouds display better in file than in line. 
+Also note that this analysis is on the word level (ignores full phrases)
+```{r}
+# get our labels into data frame
+labs = nl_labels
+
+# make sure it is char
+labs$left_box = as.character(labs$left_box)
+labs$right_box = as.character(labs$right_box)
+
+# get into individual words, rather than phrases
+# each word stays associated with participant id
+labs$id = rownames(labs)
+llist <- strsplit(labs$left_box, " ")
+ndl = data.frame(Id=rep(labs$id, sapply(llist, length)), Words=unlist(llist))
+
+# do same thing for right box
+rlist <- strsplit(labs$right_box, " ")
+ndr = data.frame(Id=rep(labs$id, sapply(rlist, length)), Words=unlist(rlist))
+
+# combine right and left into one table again
+cleanedlabs = rbind(ndl, ndr)
+
+# clean up words that mean the same thing
+cleanedlabs$Words = gsub("afro","african",cleanedlabs$Words)
+cleanedlabs$Words = gsub("rythmic","rhythmic",cleanedlabs$Words)
+cleanedlabs$Words = gsub("non","no",cleanedlabs$Words)
+cleanedlabs$Words = gsub("drums","drum",cleanedlabs$Words)
+cleanedlabs$Words = gsub("dunun","dundun",cleanedlabs$Words)
+cleanedlabs$Words = gsub("percurssion","percussion",cleanedlabs$Words)
+cleanedlabs$Words = gsub("base","bass",cleanedlabs$Words)
+cleanedlabs$Words = gsub("load","loud",cleanedlabs$Words)
+cleanedlabs$Words = gsub("with","",cleanedlabs$Words)
+cleanedlabs$Words = gsub(",","",cleanedlabs$Words)
+cleanedlabs <- cleanedlabs[!apply(cleanedlabs, 1, function(x) any(x=="")),] 
+cleanedlabs <- cleanedlabs[!apply(cleanedlabs, 1, function(x) any(x=="for")),] 
+cleanedlabs <- cleanedlabs[!apply(cleanedlabs, 1, function(x) any(x=="or")),] 
+cleanedlabs <- cleanedlabs[!apply(cleanedlabs, 1, function(x) any(x=="the")),] 
+cleanedlabs <- cleanedlabs[!apply(cleanedlabs, 1, function(x) any(x=="a")),] 
+cleanedlabs <- cleanedlabs[!apply(cleanedlabs, 1, function(x) any(x=="in")),] 
+cleanedlabs <- cleanedlabs[!apply(cleanedlabs, 1, function(x) any(x=="through")),]
+cleanedlabs <- cleanedlabs[!apply(cleanedlabs, 1, function(x) any(x=="no")),] 
+cleanedlabs <- cleanedlabs[!apply(cleanedlabs, 1, function(x) any(x=="1")),] 
+cleanedlabs <- cleanedlabs[!apply(cleanedlabs, 1, function(x) any(x=="2")),] 
+```
+
+
+### Make word cloud of raw labels
+```{r}
+# get organized for word cloud
+df = as.matrix(cleanedlabs$Words)
+df = tolower(df) # make sure all lowercase
+tabled = table(df)
+
+# plot label frequencies
+barplot(sort(tabled, decreasing = FALSE), las=2, cex.names=.7, horiz=TRUE, xlim = c(0,25))
+
+# make word cloud
+set.seed(1234) # for reproducibility
+dframe = data.frame(tabled) # convert back to data table
+
+# create word cloud
+if(op){
+  postscript(here("figures/general_wordCloud.ps"),  width=10, height=10)
+  wordcloud(words = dframe$df, freq=dframe$Freq, min.freq = 1, 
+          max.words=200, random.order=FALSE, rot.per=0, 
+          scale=c(4,.5))
+  dev.off()
+} else {
+  wordcloud(words = dframe$df, freq=dframe$Freq, min.freq = 1, 
+          max.words=200, random.order=FALSE, rot.per=0, 
+          scale=c(4,.5))
+}
+```
+
+### Analyze labels by cluster
+First, we need to make a new table with labels for each stimulus
+```{r}
+# Create new data frame with labels mapped onto stimuli
+stimlabs = nl_positions
+for (irow in 1:nrow(stimlabs)){
+  for (icol in 1:30){
+    currside = stimlabs[irow,icol]
+    if (currside == 1) #1 is left 
+      stimlabs[irow, icol] = labs$left_box[irow]
+    else {
+      stimlabs[irow, icol] = labs$right_box[irow]
+    }
+    
+    # do some of the same cleaning as we did before
+    # we don't need to do as much now because the words are still in their phrase, rather than individual
+    stimlabs[irow, icol] = gsub(",","",stimlabs[irow, icol])  
+    stimlabs[irow, icol] = gsub("afro","african",stimlabs[irow, icol])
+    stimlabs[irow, icol] = gsub("drums","drum",stimlabs[irow, icol])
+    stimlabs[irow, icol] = gsub("dunun","dundun",stimlabs[irow, icol])
+    stimlabs[irow, icol] = gsub("percurssion","percussion",stimlabs[irow, icol])
+    stimlabs[irow, icol] = gsub("base","bass",stimlabs[irow, icol])
+    stimlabs[irow, icol] = gsub("rythmic","rhythmic",stimlabs[irow, icol])
+    stimlabs[irow, icol] = gsub("melodies","melodic",stimlabs[irow, icol])
+    stimlabs[irow, icol] = gsub("load","loud",stimlabs[irow, icol])
+  } 
+}
+```
+
+Now we make lists of labels corresponding to each cluster
+```{r}
+# get stim / cluster number mapping
+stimclusters = nl_hc$cluster
+f = data.frame(lapply(stimclusters, type.convert), stringsAsFactors=FALSE)
+
+# loop through clusters and save stimulus labels
+nclusts = max(f)
+clustlabels = list()
+for (iclust in 1:nclusts){
+  indices = which(f %in% iclust) # get stim cols corresponding to this cluster
+  # make vector of labels from these cols
+  tmp = stimlabs[,indices]
+  if (length(indices) > 1){ # more than one stim for this cluster
+    clustlabels[[iclust]] = paste(tmp, sep = ',') #combine string vectors for each stim 
+    }
+  else {clustlabels[[iclust]] = tmp}
+}
+```
+
+Create document term matrix with the labels for each cluster
+```{r}
+# create corpus of docs
+docs <- Corpus(VectorSource(stimlabs)) %>% 
+  #tm_map(removePunctuation) %>% # this is introducing extra c character.. 
+  tm_map(stripWhitespace) %>%
+  tm_map(content_transformer(tolower)) %>%
+  tm_map(content_transformer(removePunctuation)) %>%
+  tm_map(removeWords, stopwords("english")) %>%
+  tm_map(removeWords, stopwords("SMART")) #%>%
+  #tm_map(stemDocument, language="english") 
+
+# convert to term document matrix
+tdm <- TermDocumentMatrix(docs) 
+```
+
+### Report some descriptive stats
+Associations = terms that correlate in the matrix 
+```{r}
+#findFreqTerms(tdm, 60)
+findAssocs(tdm, "high", 0.8)
+findAssocs(tdm, "low", 0.8)
+
+findAssocs(tdm, "fast", 0.8)
+findAssocs(tdm, "slow", 0.8)
+
+findAssocs(tdm, "rhythmic", 0.8)
+findAssocs(tdm, "arhythmic", 0.8)
+
+```
+
+### Prepare for comparison clouds (difference between clouds)
+We want to do this on multiple levels
+NB. cluster number in dendrogram is weird (not from left to right)
+- plotting all clusters 1:8 = lowest level
+- 1,6 vs. 2; 8:7 vs. 3:5 = medium
+- 1,2,6 vs. 8,7,3,4,5 = highest level
+```{r}
+# convert tdm to data frame for easier handling
+tdm = as.matrix(tdm)
+dfdtm = data.frame(tdm)
+colnames(dfdtm) = colnames(stimlabs)
+ndfdtm = dfdtm # make a copy so don't mess up row sums when adding new cols
+
+# high cluster
+h1inds = f %in% c(1,2,6)
+h2inds = f %in% c(8,7,3,4,5)
+ndfdtm$h1 = rowSums(dfdtm[,h1inds]) 
+ndfdtm$h2 = rowSums(dfdtm[,h2inds])
+
+# med cluster
+m11inds = f %in% c(1,6)
+m12inds = f == 2
+m21inds = f %in% c(8,7)
+m22inds = f %in% c(3:5)
+
+ndfdtm$m11 = rowSums(dfdtm[,m11inds]) 
+ndfdtm$m12 = rowSums(dfdtm[,m12inds]) 
+ndfdtm$m21 = rowSums(dfdtm[,m21inds]) 
+ndfdtm$m22 = rowSums(dfdtm[,m22inds])
+
+
+# low cluster 
+l1inds = f == 1
+l2inds = f == 2
+l3inds = f == 3
+l7inds = f == 7
+
+# NOTE - cannot take rowsums of clusters that only have one stim. basically we just need to repeat that column (for 6,8,4,5)
+
+ndfdtm$l1 = rowSums(dfdtm[,l1inds]) 
+ndfdtm$l2 = rowSums(dfdtm[,l2inds]) 
+ndfdtm$l3 = rowSums(dfdtm[,l3inds]) 
+ndfdtm$l4 = dfdtm$S12
+ndfdtm$l5 = dfdtm$S13
+ndfdtm$l6 = dfdtm$M4
+ndfdtm$l7 = rowSums(dfdtm[,l7inds]) 
+ndfdtm$l8 = dfdtm$M13
+
+# normalize by total number of words used in each cluster
+ndfdtm_norm = apply(ndfdtm, 2, function(c) c / nrow(ndfdtm)) 
+apply(ndfdtm_norm, 2, max) 
+
+# or normalize by using log
+ndfdtm_norm_log = ndfdtm
+for (icol in ncol(ndfdtm_norm_log)){
+   for (irow in nrow(ndfdtm_norm_log)){
+     if (ndfdtm_norm_log[irow, icol] != 0){
+        ndfdtm_norm_log[irow, icol] = 1 + log(ndfdtm_norm_log[irow, icol])  
+     }
+   }
+}
+apply(ndfdtm_norm_log, 2, max) 
+
+# define cluster colors we will use for future plotting
+ccols = brewer.pal(n = 8, name = "Dark2")
+ccols_ordered = ccols[c(1,3,6,7,8,2,5,4)] # omg such a dumb way to do this.. 
+```
+
+### Create comparison clouds
+First for highest level cluster
+```{r}
+forcloud = as.matrix(ndfdtm_norm[,c("h1", "h2")])
+
+if(op){
+  postscript(here("figures/nl_compcloud_main.ps"),  width=10, height=10)
+  comparison.cloud(forcloud, random.order=FALSE, rot.per=0,
+                   title.size=2, max.words=100, colors=c("saddlebrown", "gray"), match.colors=TRUE, title.bg.colors = c("saddlebrown", "gray"))
+  dev.off()
+} else {
+  comparison.cloud(forcloud, random.order=FALSE, rot.per=0,
+                   title.size=2, max.words=100, colors=c("saddlebrown", "gray"), match.colors=TRUE, title.bg.colors = c("saddlebrown", "gray"))
+}
+```
+
+Now for medium level clusters
+```{r}
+forcloud = as.matrix(ndfdtm_norm[,c("m11", "m12")])
+
+if(op){
+  postscript(here("figures/nl_compcloud.ps"),  width=10, height=10)
+  comparison.cloud(forcloud, random.order=FALSE, rot.per=0,
+                   title.size=2, max.words=100, colors=c("#999933", "#44AA99"), match.colors=TRUE, title.bg.colors = c("#999933", "#44AA99"))
+  dev.off()
+} else {
+  comparison.cloud(forcloud, random.order=FALSE, rot.per=0,
+                 title.size=2, max.words=100, colors=c("#999933", "#44AA99"), match.colors=TRUE, title.bg.colors = c("#999933", "#44AA99"))
+}
+
+```
+
+```{r}
+forcloud = as.matrix(ndfdtm_norm[,c("m21", "m22")])
+
+if(op){
+  postscript(here("figures/nl_compcloud2.ps"),  width=10, height=10)
+  comparison.cloud(forcloud, random.order=FALSE, rot.per=0,
+                   title.size=2, max.words=100, colors=c("#332288", "#DDCC77"), match.colors=TRUE, title.bg.colors = c("#332288", "#DDCC77"))
+  dev.off()
+} else {
+  comparison.cloud(forcloud, random.order=FALSE, rot.per=0,
+                   title.size=2, max.words=100, colors=c("#332288", "#DDCC77"), match.colors=TRUE, title.bg.colors = c("#332288", "#DDCC77"))
+}
+```
