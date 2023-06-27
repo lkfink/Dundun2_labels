@@ -1,6 +1,6 @@
-% LF new attempt at acoustic feats for dundun
-% 20210801
-% 20221210
+% Code to extract acoustic features for the dundun stimulus set
+% Lauren Fink (lauren.fink@ae.mpg.de)
+% Last updated 20221210
 
 % Set directories
 cwd = '/Users/lauren.fink/Documents/Projects/dundun/Code/acousticAnalyses/Madita_stims';
