@@ -1,7 +1,7 @@
 # Dundun2_labels
 Code to accompany the paper: 
 
-> Fink, L., Hörster, M., Poeppel, D., Wald-Fuhrmann, M., Larrouy-Maestri, P. (2023, submitted). Features underlying speech versus music as categories of auditory experience.
+> Fink, L., Hörster, M., Poeppel, D., Wald-Fuhrmann, M., & Larrouy-Maestri, P. (2023, July 24). Features underlying speech versus music as categories of auditory experience. Retrieved from psyarxiv.com/2635u
 
 ## Abstract
 Listeners show remarkable abilities ​to distinguish music and speech when asked but the essence of such categories is arguable. Here, using recordings of dùndún drumming (a West-African drum also used as a speech surrogate), we first replicate standard speech-music categorization results (N=108, sample size based on a prior study), then depart from the typical experimental procedure by asking participants (N=180) to freely categorize and label these recordings. Hierarchical clustering of participants’ stimulus groupings shows that the speech/music distinction emerges, but is not primary. Analysis of participants' labels in the free-response task converges with acoustic predictors of the categories, supporting the effect of priming in music/speech discrimination, and thereby providing a new perspective on the categorisation of such common auditory signals. 
