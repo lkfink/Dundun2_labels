@@ -1,0 +1,183 @@
+participant_id,Label_left_box,Label_right_box,Reasons,label_category
+P001,Unsure Percussion,Rhythmic Sounds,I was looking for sounds with a rythm that could be danced to or sounds of people randomly banging on an instrument.,timing
+P002,Upbeat drums,scratch affair,upbeat drums the volume was more louder and had drums more vibrant. As for scratch affair it sounded like a poor quality recording more down,quality
+P003,Drums,Capoeira Vibes,The 1st group had clips where the main instrument were drums. The 2nd group had clips that sounded like what is played in capoeira fights.,conceptual
+P004,Slow beat,fast beat,The classification was based on the number of beats per minute.,timing
+P005,Melodies,Phrases,"The first group seemed more like real melodies of songs, while second group where like random sounds without context.",conceptual
+P006,Similar Sounding,Different Sounding,I largely couldn't figure out what the correct solution was. There seemed to be something strange going on like slowing down the same music.,conceptual
+P007,Tradition,Bonfire Happiness,The slow emphasis when making sound for 1 and the upbeat cheerfulness of 2 reminds of the bonfires back home.,conceptual
+P008,deep sound (in small room),open sound (in large room),in one category the sound sounded deeper (more rich) like it was played in a smaller room then the other category,timbre
+P009,Psychedelic sounds,Dry sounds,"I took as a reference what kind of sound it was, one had a weird sound and the other sounded drier",conceptual
+P010,Loud type of drums sound,Bass sounds,"In the first section I heard the same type of kicking drum sound, very loud. Second section it was very smooth bass sounds",instrument
+P011,Low percussions,High percussions,I think they sound like percussions but some of them are very low and some of them sound higher.,pitch
+P012,African drums,Echo,"African drums because it reminds me of the soundtrack of movies located somewhere in Africa, echo because it reminds me of sounds poorly rec",conceptual
+P013,Robotic,Human,The features of the recordings that drove my decision was the  groove and the tempo.,conceptual
+P014,"Bass, dull sound","crackling, drum","In sounds in group 1 i heard  a distinct rumble and in group 2 sounds were more like crackle, whitout rumble",timbre
+P015,"Bad Quality
+Percusion",Percusion with Bass,"the Group 1 had poor sound quality percusions and had no bass at all,Group 2 has better quality percusion with bass.",quality
+P016,drums,strings,some sounds vibrated like bass strings so I categorized them as drums and strings because the others were clearly different types of drums,instrument
+P017,Mostly low frequencies,Middle frequencies,The amount of low frequencies in the background of the instrument,pitch
+P018,synthesizer,drums,The most outstanding features of the recordings sounds like those instruments,instrument
+P019,Bass heavy and washy,Compressed and higher pitch,"In group 1 I noticed low bass drums that seemed to come in and out of focus, and for group 2 it seemed louder and more in your face",timbre
+P020,Bass-less sounds,Bassy sounds,The sounds that I placed on the right had a lot of bass in them. The other sound didn't have as much bass and had very little of it if any.,pitch
+P021,beatbox,tin,"The ""beatbox"" group sounded like a plucked instrument but also like blowing through teeth, the ""tin"" group was like metal crashing",instrument
+P022,clear rhythms,unclear rhythms,"some had clear repeated rhythmic cells in them, while some where more random and were harder to define rhythmically",timing
+P023,Drums - bass,Drums - Treble,"The first group of sounds had a very deep low pitch sound, while the second group has high pitch drum like sounds.",pitch
+P024,Drum sounds,Guitar sounds,The drum sounds sounded like individual drums being played. The guitar sounded like a guitar string being plucked,instrument
+P025,djembe drum,bass drums,the rhythms and series of tone,instrument
+P026,Rhythmic sounds,Non-rhythmic sounds,"All sounds were about percussion instruments, and I noticed some sounds had a clear rhythm, others had the rhythm of a talking person",timing
+P027,hard,soft,"Soft recordings were friendly to my ears, thay were calm and gentle, while hard recordings were not very pleasant and irritating to hearing.",intensity
+P028,Base Drums,Bongo Drums,"In group 1 the sound was more deep, hence the base drum and group 2 the drums had more an Island sound hence the bongo drum.",instrument
+P029,LOUDER,QUIET,LOUD DRUMS AND QUIET DRUMS,intensity
+P030,High pitch sounds,Bass sounds,"the high pitch ones you could clearly hear the sound of the drums, on the bass ones it wasn't that clear",pitch
+P031,Rytmic Group,Unrythmic group,Listening to the first audio i started categorizing them  in Group 1 If they had the same rythm and 2 if they didn't,timing
+P032,Music,Voices,"I listened to how the sounds repeated and harmonized with each other in each track, regular sounds are more musical to me than voices",conceptual
+P033,not enough repeating motifs,Sounds Rythmic,"Sounds that had clear rhythms and ones with repeating motifs that generated a sense of rhythm was placed in the ""sounds rhythmic"" group",timing
+P034,covered,drums,"In covered there is a strange sound in every track that seem to covered the principle sound, like a distortion. In drums there are drums",timbre
+P035,conch,drum,"because in the first box there were conch sounds playing, and in the second one were drums playing",instrument
+P036,soft drum,hard drum,"mainly because of the volume, I also considered that the soft drums reverberate more making it sound like they're softer than the hard drums",timbre
+P037,leaves,drums,leaves because it sounded like when leaves move because of the air and drums because it sounded like that,instrument
+P038,high tones,low tones,There was high tones in the first group. In the second group low tones.,pitch
+P039,Rythmic,Arrythmic,"The ones I placed in the ""Rythmic"" group had a determined  beat to them, while the ones in ""Arrythmic"" did not.",timing
+P040,They sounds good,They sounds bad,"Sounds in the first group were nice to hear, sounds in other group were opposite",quality
+P041,Calmer sounds,Louder sounds,"""Calmer sounds"" had lower drum sound volume and higher bass sound while ""Louder sounds"" had higher drum volume than bass",intensity
+P042,Bass sounds,Drum sounds,The predominance of the bass or the drums,instrument
+P043,Deeper Drum.,Lighter Drum,The drums in the recordings,timbre
+P044,Slow beats,Fast beats,"I was careful not to pay attention to the muffled sound while listening, which could distort the true speed of the sounds. I tried to make t",timing
+P045,slow beat,fast beat,slow beat I've choose this because the melody was slow and with fast beat I've choose this because the melody was fast,timing
+P046,Mellow,Brash,The sound of the instruments.,timbre
+P047,Sharper foreground sound,bassier background sounds,I classed the sounds based on their pitch and how much they came into the foreground of the soundscape and how much attention they took,timbre
+P048,drum,bass,"The Drum sound group reflected a more realistic sound and was less digitalized, and the bass sound group some were complete arhythmic and mo",instrument
+P049,discernable percussion,distorted percussion,one group were mostly of higher frequency with a discernable beat/rhythm whereas the other group were more distorted and random,timing
+P050,harmony,raw,harmony was easy to listen to and Raw had a lower quality,conceptual
+P051,Click,Percussion,The first sound that came louder was the one that define in wich group it will stay.,instrument
+P052,deep sounds,deaf sounds,"Bass was important to me and the so-called ""808""",conceptual
+P053,Meditation sounds,raw sounds,"The first group remind me of organic sounds, that are used in yoga, rituals or meditation sessions. The 2 sounds like sounds used in films",conceptual
+P054,Sounds like a guitar or some sort of string,"Sounds like drumming, repercussions",The feature which drove me to my decision was what was the main sound on each recording.,instrument
+P055,musical,percussion,"Musical where the ones where I felt like the bass sound was more prominent, percussion where the percussion was more prominent.",conceptual
+P056,clearer sound,louder,Clearer sound cause the sounds of those tracks were more crisp than the others and louder cause  the drums were more dominant and louder.,conceptual
+P057,Chaotic mix of sounds,structured rhythm,The consistency and clarity of their beat,timing
+P058,Type1 beat,Type 2 beat,For the slow bass versions for type 1 and type 2 they had different melodies. Type 2 sounded so natural to me and was easier  to pick out.,timing
+P059,"""Full"" sounds",Noisy/clanking sounds,"As soon as I heard thrashing/clanking, I put them in the second group. I couldn't think of a better word than ""full"" for the first",timbre
+P060,fast and guitar sound,deep and clap sound,the first group sounded more like strings in the background and a lighter sound. the seconde one had more strong sounds,instrument
+P061,Drums,Percurssion,Percentage of Bass presence registered between the 2 groups as well as harmonics,instrument
+P062,Acoustic,Drums,The kind of sound,instrument
+P063,Tambores,Percurssão,The first one Tambores plays sounds made by drums played by hands. The seconds one Percurssão plays sounds whose vibrations last longer.,instrument
+P064,Rhythmic beats,Random beats,"The rhythmic drum patterns are more musical and enjoyable, while the random ones are not",timing
+P065,Bass,Bongo drums,"The group 1 were sounds that could be made with a bass or electronically, and group 2 were like hand made sounds with a bongo or some drums",instrument
+P066,rhythmic,non-rhythmic,"Those sounds from group classified as ""rhythmic"" made me feel good and I felt the rhythm, which I didn't with the other group.",timing
+P067,silent contrabass,load contrabas with something else,sound instruments,instrument
+P068,Capoeira,Jungle,The Capoeira recording reminded me a lot of Brasil and the Jungle one reminded me of Tarzan.,conceptual
+P069,drum,tin,"the group classified as drum, the sound has bass sounds like a drum, and the group classified as tin sounded more like tin, it was bit loud.",instrument
+P070,faster beats,slower beats,the pace of the recording or bpm (beats per minute),timing
+P071,Rythmic,Not so rythmic,what drove my decision was based on if i could follow or dance to the beat,timing
+P072,no rythm,rythm,The existance or not of a rythm in the recordings.,timing
+P073,Base drum sound,High pitch tin sound,"The ""base drum sound "" has  a low base tune that plays whilst the drum  was banged but the "" High pitch tin sound"" has a high pitch tin tune",pitch
+P074,deep tones,high notes,only my feeling,pitch
+P075,Muffled,loud and clear,In my opinion there was two very distinctive sound in the recordings. One was very clear and loud drum sound and the other sounded quieter,intensity
+P076,harsh,soft,"the harsh group sounded more like a blunt instrument, whereas the soft group sounded more melodic, a bit more quiet and harmonic",intensity
+P077,Bounce,Bass,The first group sounded more like a ball bouncing and the other more characteristic of drums,instrument
+P078,PERCUSSION,ELECTRO PERCUSSION,"The first category had a more acoustic feel, whilst the second category had a more techno/ electro feel accompanying the percussion.",instrument
+P079,More basy sounds,"More ""treble"" high sounds","Mostly the pitch of the sounds. Also few of them was ""empty"", and more was ""full"" and richer.",pitch
+P080,Drums,Guitar,The sound.,instrument
+P081,Predominant bouncy sound,Predominant crisp and sharp sound,"There were two main sounds in all recordings, in most, the deep bouncy sound was predominant while in others was the crisp  drums-like sound",timbre
+P082,closed culture drum,open culture riot,the sounding of the drum and the open snare,timbre
+P083,string,drums,bass  and beat,instrument
+P084,Bubbly,Sharp,"The Bubbly sound had a sort of ""bubble"" effect, almost bouncy, striking and more echoey. The Sharp sound was more rhythmic and shrieking.",conceptual
+P085,Random sounds/no structure,Sounds with rhythm/close to music,I have classified the sounds depending on their rhythm; whether I could feel it as music or just some sounds that did not have a melody,timing
+P086,raw,bass,"In raw i think it was so clean sound, and hear the strings",instrument
+P087,Relaxing,Euphoric,My decision was mostly about rhythm and the general feeling I got from the sounds.,conceptual
+P088,Regular and low,the rest,Regular and low has sounds that have a regular pattern in a low tone. The rest is composed of sounds that do not fit the 1st description,timing
+P089,Sad and deep,happy and vibrant,I classified them according to the tempo and deepness of the rhythm and sounds.  I tried to put happy and fast songs in one side,conceptual
+P090,Heavy bass dominant,Not heavy bass dominant,I noticed that many recordings had a dominant heavy bass sound whilst some did not so that determined how I differentiated the recordings.,pitch
+P091,without rythm,with rythm,i found out that some of the recordings followed a rythm and some others did not as well. Those were more like casual sounds,timing
+P092,Dunun drums,Timpani n drums,"From the recordings I could hear that the sounds are coming from two or maybe more different drums, but then I chose these two.",instrument
+P093,bang,harsh,the unsettling tone,quality
+P094,high-pitched,low-pitched,"The lower-pitched the sound, the more uncomfortable it was for my ears",pitch
+P095,Very Similar beat/sound instrument,beats/sounds different from group 1,"The sounds of the group 1 are very similar. Unlike group 2, which seems to have been modified and have differents beats.",timing
+P096,to the rhythm,no rhythm,it was drums and they are used to make a rhythm of a song so when I didn't catch the rhythm in few records I started to categorize them,timing
+P097,vibrations,tambourine,"I chose the name based on the instrument that I could hear more clearly than the other, even if I'm not sure what ""vibrations"" belong to",instrument
+P098,Closed container beats,Loud open can beats,"The pitch of the sound, how each had its only differences in loudness",timbre
+P099,loud sound with a type of drum,"remembers playing on a guitar, playing on the strings and body using all parts of it","in the first group the music seemed to be played on a kind of drum. in the second it seemed the sound of viola strings, sound of a table",instrument
+P100,Drums,Others,"First group sounded quite similar one to another, like some sort of drums. Second group  was made up of dissimilar to first group sound",instrument
+P101,Slow,Upbeat,The tempo and mood,timing
+P102,string instrument,drum instrument,"The recordings had rhythm audios, some I indentified being played in a strings instruments and others were played in some type of drum",instrument
+P103,The string instrument is louder. Or at least I think It is a string one.,The instrument being hitten is louder,"I think that this was the easiest thing to catch while listening, that's why I described this categories.",instrument
+P104,FM,AM,The sound of the two groups reminded me of the FM and AM radio stations. There was a clear difference in the sound quality.,quality
+P105,Bass guitar,Drums,Well sounds in the background affected my decisions. You know u can easily distinguish between drums and a bass guitar.,instrument
+P106,high base,low base,some beats had a high pitched base and the sound was louder. the beats with a low base had a much deeper sound,pitch
+P107,bass lead,beat lead,Some of the sounds seemed dominated more by a bass sound throughout. The others sounded like they were driven more by a drum or beat.,conceptual
+P108,not good,ok,whether the sounds were rhythmic,quality
+P109,Normal quality,Low quality,"The quality of these sounds varied. Some sounded hard to the ear, while most were relatively audible.",quality
+P110,slow rhythms,fast rhythms,I conditioned my decision by the differences in the rhythm of individual recordings. Some were faster than others in my opinion.,timing
+P111,"longer, with more low pitch","shorter, with more higher pitch","i took into consideration the rythim which was mostly faster in the ""shorter, with more higher pitch"" category, also by the similarity.",timing
+P112,wood,metal,How high or low the sound is and how intense it sounds,timbre
+P113,Guitar riffs,Guitar riffs through a speaker in the ocean,"the sounds reminded me of guitar riffs, and the group 2 sounds sounded like a muffled speaker i once heard",conceptual
+P114,loud drum,soft drum,"The sounds of the drum. In ""soft"" drum there was more rhythm while in ""loud drum"" there was more banging sound",intensity
+P115,Deep Sounds,High sounds,"Some of them sounded deep, some of them sounded high pitched. I decided to sort them by that.",pitch
+P116,bass,metal,for the sound that stood out the most after the percussion,timbre
+P117,quiet,loud,"FIRST, ONE SOUND WAS QUIET AND CALM. HE WAS LITTLE, RHYTHMIC. SIMILARLY, THE SECOND WAS LOUD, FADE, LOUD.",intensity
+P118,"slower, hollow,
+","faster, higher pitch","speed of rhythm, instrument, feeling",timing
+P119,deep and slower,faster and sharper,"sounds from group ""deep and slower"" all sounded almost  the same to me, deepter in a way, and sounds from the other group were more sharp",timing
+P120,Soft and pleasant,unpleasant,The one in group one could be used to produce soft and pleasant sounds = the one in second group were difficult to match up and listen to.,quality
+P121,Bass & Drum,Drums and wave,"the sound was like that of two instruments, in the first group the bass sound is leading and the drumming in the background and vice versa",instrument
+P122,Melodie,Rythm,I have attended to whether the sound was predominantly rhythmic or melodic,conceptual
+P123,Bass,Knocks,"The label ""Bass"" is because the sounds were similar to that musical instrument. ""Knocks"" because it was like knocking a surface.",instrument
+P124,touched with hands,touched with sticks,"vibrations, wetness/dryness",timbre
+P125,muffled distorted beats,sharp rythems,The overall melodic pattern of each clip and the rythm of the beats,conceptual
+P126,Soulful,rhythmic,it is the drums in the background and how the beat made me move,conceptual
+P127,Correct Rhythm,Backwards Rhythm,"The first group, the rhythm had melody. the second one it felt like the melody is playing from end to beginning",timing
+P128,strings,muffled drums,"In most sounds i heard both strings and drums, but in some sounds the drums were louder, and in another i could hear the strings better",instrument
+P129,Hard,Soft,"The ""Hard"" group had a thick tone, like the drums were banged harder, and the ""Soft"" sounds had soft tones.",intensity
+P130,worse quality,better quality,"recordings in the worse quality group, were visibly (hearably?) more compressed, while ones in better quality only had high-freq cut off",quality
+P131,"""Wooden"" sounds","""Elastic"" sounds","The sounds in the ""wooden"" group resembled pieces of wood hitting each other. In the ""elastic"" group they sounded like ""boing"".",timbre
+P132,cleaner sounds with buzzing? (plucking the guitar string),deformed sounds,"These cleaner sounds sounded very similar, being quieter or louder. And the deformed ones were, for example, with an echo effect, etc.",quality
+P133,Fast Tempo,Slower Tempo,"The soundbites with the most beats per second got sorted to the left group, while the relatively slower ones were sorted to the right group.",timing
+P134,sounds,noises,"The recordings I classified as ""sounds"" were more enjoyable to listen to and were more like music to me than the ""noises"" which were less so",quality
+P135,Clearer sounds,Muffled sounds,The clearer sounds were easier to identify instruments and were louder as opposed to the second group,intensity
+P136,muffled sounds,primitive sounds,"the ""muffled sounds"" group was full with more mellow, rich, musical, sonorous sounds; the second group was full of pure, percussive sounds.",conceptual
+P137,clear sounds,muffled sounds,"I noticed that some recordings were muffled, as they were played in a ball of glass and others were very clear and ""loud""",timbre
+P138,smooth,noisy/random,The group 1 were more smooth and more like an echo. The group 2 were louder and more different from each other.,conceptual
+P139,Celebration/ceremony,practice for ceremony/celebration,"A good amount of the sounds felt very fun and vibrant, or well polished, but a good amount of the other beats sounded a bit scratchy",conceptual
+P140,Fast melodies,distant sounds,"Fast melodies were normal sounds with fast beat and ""distant sounds"" were heard like from under the water or behind the wall.",timing
+P141,Bass,Tambourine,"Bass were sounds that contained a lot of bass, Tambourine were sounds that contained that instrument or something similar",instrument
+P142,"Soft, fluffy sounds","Hard, popping sounds","The soft, fluffy sounds sounded, well, comfortable, and the others harsh, almost painful to the ear.",timbre
+P143,Slower Tempo,Faster Tempo,"I decided the groups based on the tempo of the beats that I heard. I found other differences in the sound, but the tempo seemed better.",timing
+P144,writing machine,music instrumental,the sound was similar to these 2 things,conceptual
+P145,Deep hand drum sounds,high-pitch stick drum sounds,The deep sounds seem to be hand-beaten drums of various sizes. The high-pitch seem to sound like drums beaten by a stick,pitch
+P146,dry,wave,"the eco of the sound. In the ""dry"" group, there is not a lot eco. In the ""wave"" group the eco is predominant",timbre
+P147,slow and easy to listen to.,rapid beast with no consistant flow,"the pace , pitch and the tempo,",timing
+P148,"These sounds were too noisy and disturbing, they hurt my ears a little bit.",These sounds were calming and much better to listen than the sounds in group 1.,"The rhythm, the volume, the instruments and mostly what I felt when I was listening to them.",quality
+P149,Afro music,Jazz,The sound of the beat.,conceptual
+P150,Bong,Non bong,"the absent or not of a ""bong"" sound, as simple as that.",timbre
+P151,Metal drum,Bongo/wooden drum,"It was sometimes hard to hear the difference, but one type of recording sounded more metallic and tonal, while the other sounded monotonous",instrument
+P152,Percussion,Percussion Bass,"Every sound was percussion, but in some of them i can feel the bass and some groove",instrument
+P153,similar sounds base on bass,others sounds,as i said the tune of sounds feels similar on group one and the secend gruop i evolve different sounds,conceptual
+P154,Slower Paced and Less Melodic,Faster Paced and More Melodic,"Well, in the first group, I think for the most part the rythm sounded slightly off. The other sounded better, like brazillian music.",timing
+P155,Bass percussion,High frequency percussion,"I divided the two groups into mainly lower frequency percussive bass sounds and sharper, higher frequency percussive sounds.",pitch
+P156,Sounds that have less resonance,Sounds with more resonance,"It was the way the sounds were registered. Some sounded as if there was an echo of some sort (group 2) and the others had a ""clearer"" sound.",timbre
+P157,Sand bag drop,Under water drums,The sound in most of the recordings sounded like a small bag of sand or marbles is being thrown to the ground and the other drums in water.,instrument
+P158,Bass,"No base, very little bass","For ""Bass"" I listened if it sounded like it was inside of something.  For ""No bass, very little bass"" I listened for a more clear sound",conceptual
+P159,Drum sounds,Stringy sounds,The drum sounds had a lot of drum elements to them. A beating of drums. Whereas the stringy sounds sounded like instruments with strings.,instrument
+P160,Clean,Weird,"The clean ones are not inaudible and have more quality, in the other hand, the weird sounds had less sound quality and were less pleasing",quality
+P161,lower echo,higher echo,"I gruped them by the way sound emited, group with low echo had qiuck, sharp and short sound",pitch
+P162,Acoustic African drums,Modified African drums,"The Acoustic African drums all sounded natural with clear and distinct sounds, whereas the Modified African drums sounded hollow and altered",timbre
+P163,Melodious and Pleasant,Harsh and Loud,The tone and the instruments used in the recordings influenced my decisions.,conceptual
+P164,Slow-paced out of rhythm,fast-paced in rhythm,"Rhythm of the beats, their frequency and whether they are good enough as core basics of more complicated tunes.",timing
+P165,louder decibel/base sound,softer and slower sound,how each sounds starts. The louder ones are loud from when they start an throughout; while the softer ones immediately play softer.,intensity
+P166,bass drums,loud drums,rhythm,intensity
+P167,Slow sounds,Fast sounds,The features in the sounds that drove my decision where the speed of the music.,timing
+P168,Good quality bass,Bad quality bass,the bass and general audio quality of the recordings,quality
+P169,Slow drums,Fast drums,"The drums ,the speed of how the drums were beaten and how hard or gentle they were beaten those are the features that drove my decision",timing
+P170,Slower,Faster,"I think the ""Slower"" group have slower rhythms than the ""Faster"" ones.",timing
+P171,Drums,String,"One group sounded heavier on drums with little else in the background, other group had drumming and sounded like strings in the background",instrument
+P172,Low pitch( more bass),High pitch( less bass),"It was the quality of the pich. regardless of tempo, some of the sounds had a more prominent bass, while other were quite high pitched",pitch
+P173,Bassier sounds,Metallic sounds,The first group had sounds that seemed in a lower pitch while the second one had sounds that seemed made from some tin cans,timbre
+P174,stringed instruments,percussion instruments (drums),"in some clips I distinctly felt the vibrations and strings of the instrument being solicited, in others a membrane hit by something",instrument
+P175,"irregular,slow","regular,fast",is the first distinctino i thought,timing
+P176,slow beats,fast beats,the ones that felt like they were too slowed down  were in group 1 and the ones that were faster or less slowed down in group 2,timing
+P177,fast drums,slow drums,"part of the recordings had a very quick beat ,while part of it was very slow",timing
+P178,HardBass Drums,Dry Drums,"the first group had more of a bubbly, bass sound, while the second has a more sharp, almost knocking on the edge type of sound",timbre
+P179,Grave bubble,Clean percussion,"Clean percussion because it sounds more clear, without a rumble of the sound and low bubble because it sounds like it is enclosed",timbre
+P180,Low,High,"I chose Low because the bass was more prominent, and High because the percussions were high pitched.",pitch
