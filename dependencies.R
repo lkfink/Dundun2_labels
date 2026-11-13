@@ -4,6 +4,11 @@ library(tidyverse)
 library(readxl)
 library(nortest)
 library(gplots)
+#library(heatmap.plus) # NOTE heatmap.plus now archived. Need to install from archive
+install.packages(
+  "https://cran.r-project.org/src/contrib/Archive/heatmap.plus/heatmap.plus_1.3.tar.gz",
+  repos = NULL, type = "source"
+)
 library(heatmap.plus)
 library(gridExtra)
 library(wordcloud)
@@ -37,3 +42,7 @@ library(reshape2)
 library(corrplot)
 library(apaTables)
 library(caret)
+library(flextable)
+library(apaTables)
+library(flextable)
+library(officer)

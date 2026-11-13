@@ -11,7 +11,7 @@ output: html_document
 
 This document steps through all analyses reported in:
 
-Fink, L., Hörster, M., Poeppel, D., Wald-Fuhrmann, M., & Larrouy-Maestri, P. (2023, submitted). Semantic and acoustic features underlying speech-music categories. Pre-print available at: TODO
+Fink, L., Hörster, M., Poeppel, D., Wald-Fuhrmann, E., & Larrouy-Maestri, P. (2026). Reverse-engineering speech and music categorization from a single sound source. *Attention, Perception & Psychophysics.*
 
 If using anything from this repository (https://github.com/lkfink/Dundun2_labels), please cite the above paper. 
 
@@ -299,6 +299,8 @@ newaf = subset(af[,c(1,21:24)])
 
 ### Construct lms to predict behavioral sorting pca coord from acoustic PCs
 We use a custom function here for running models (see functions.R), then we print our results to a nicely formatted APA style table. CIs are estimated via bootstrapping. Model error (mean absolute error) is estimated using cross-validation. We run a model for both experiments and both dimensions of the behavioral stimulus sorting PCA. Stimulus position in the given dimension is the dependent variable and all four acoustic PCs are the predictors. 
+
+NOTE: Please see `Revisions` section below, as the final results in the manuscript change slightly at the request of a reviewer. This original analysis is kept for transparency. The final analysis can be found below. 
 
 #### Exp. 1
 ```{r}
@@ -641,3 +643,649 @@ if(op){
                    title.size=2, max.words=100, colors=c("#332288", "#DDCC77"), match.colors=TRUE, title.bg.colors = c("#332288", "#DDCC77"))
 }
 ```
+
+
+# Revisions (Sept. 2026)
+Reviewer 2 pointed out potential issues with over-fitting which led me to realize that the original cross-validation procedure uses the PCA scores across the whole dataset (not just train) which may mean data leakage affecting the test accuracy. Here, I re-do the analysis conducting PCA within each fold. 
+
+These analyses were written with the help of chatGPT 5.6 Sol. All earlier code was painstakingly written by hand with the help of Stack Overflow. 
+
+```{r}
+
+# New version of the original function in functions.R. 
+getModelRes_foldPCA <- function(pca.res, af, newaf, n_pc = 4, seed = 123) {
+
+  # Get stimulus identities and behavioral coordinates
+  stim <- as.character(pca.res$data$name)
+
+  y_values <- list(
+    "Dim 1" = pca.res$data$x,
+    "Dim 2" = pca.res$data$y
+  )
+
+# Match acoustic features to behavioral stimulus order
+  raw_idx <- match(stim, as.character(af$stim))
+  pc_idx  <- match(stim, as.character(newaf$stim))
+
+  stopifnot(
+    !anyNA(raw_idx),
+    !anyNA(pc_idx),
+    !anyDuplicated(stim),
+    !anyDuplicated(af$stim),
+    !anyDuplicated(newaf$stim)
+  )
+
+  # Original 17 acoustic features
+  feature_names <- names(af)[4:20]
+  x_raw <- af[raw_idx, feature_names, drop = FALSE]
+
+  # Original full-dataset PCA scores
+  x_original <- newaf[
+    pc_idx, paste0("PC", seq_len(n_pc)), drop = FALSE
+  ]
+
+  stopifnot(
+    ncol(x_raw) == 17,
+    all(vapply(x_raw, is.numeric, logical(1))),
+    !anyNA(x_raw),
+    !anyNA(x_original)
+  )
+
+  results <- list()
+
+  # Run analyses separately for both behavioral dimensions
+  for (dim in names(y_values)) {
+
+    y <- as.numeric(y_values[[dim]])
+
+    # Identical folds for original and corrected methods
+    set.seed(seed)
+    folds <- caret::createMultiFolds(
+      y, k = 5, times = 10
+    )
+
+    # Original approach: PCA computed before CV
+    control_original <- caret::trainControl(
+      method = "repeatedcv",
+      number = 5,
+      repeats = 10,
+      index = folds,
+      savePredictions = "final"
+    )
+
+    model_original <- caret::train(
+      x = x_original,
+      y = y,
+      method = "lm",
+      trControl = control_original,
+      metric = "MAE"
+    )
+
+    # Corrected approach: PCA computed inside each fold
+    control_corrected <- caret::trainControl(
+      method = "repeatedcv",
+      number = 5,
+      repeats = 10,
+      index = folds,
+      preProcOptions = list(pcaComp = n_pc),
+      savePredictions = "final"
+    )
+
+    model_corrected <- caret::train(
+      x = x_raw,
+      y = y,
+      method = "lm",
+      preProcess = c("center", "scale", "pca"),
+      trControl = control_corrected,
+      metric = "MAE"
+    )
+
+    # Store both fitted models
+    results[[dim]] <- list(
+      original = model_original,
+      corrected = model_corrected
+    )
+  }
+
+  # Create comparison table
+  comparison <- do.call(rbind, lapply(names(results), function(dim) {
+
+    original  <- results[[dim]]$original$results
+    corrected <- results[[dim]]$corrected$results
+
+    data.frame(
+      Dimension = dim,
+      Method = c("Original PCA", "Fold-wise PCA"),
+      MAE = c(original$MAE, corrected$MAE),
+      RMSE = c(original$RMSE, corrected$RMSE),
+      R2 = c(original$Rsquared, corrected$Rsquared)
+    )
+  }))
+
+  return(list(
+    models = results,
+    comparison = comparison
+  ))
+}
+
+
+
+# Run both experiments
+cv_exp1 <- getModelRes_foldPCA(wl_pca, af, newaf)
+cv_exp2 <- getModelRes_foldPCA(nl_pca, af, newaf)
+
+
+# Combined comparison table
+cv_comparison <- rbind(
+  transform(cv_exp1$comparison, Experiment = "Exp 1"),
+  transform(cv_exp2$comparison, Experiment = "Exp 2")
+)
+
+cv_comparison <- cv_comparison[
+  , c("Experiment", "Dimension", "Method", "MAE", "RMSE", "R2")
+]
+
+print(cv_comparison, row.names = FALSE)
+```
+
+NOTE: these results were reported in the response to reviewers and some are still in the Supplemental Information of the manuscript. 
+```{r}
+
+# ============================================================
+# Additional sensitivity analysis: 3 vs. 4 vs. 5 acoustic PCs
+# Repeated 5-fold CV (10 repetitions)
+# PCA fitted independently within each training fold
+# ============================================================
+
+checkPCcount <- function(pca.res, af, seed = 123) {
+
+  # Match original acoustic features to behavioral stimulus order
+  stim <- as.character(pca.res$data$name)
+  idx <- match(stim, as.character(af$stim))
+
+  stopifnot(!anyNA(idx), !anyDuplicated(stim))
+
+  # Original 17 acoustic features (not precomputed PCs)
+  x <- af[idx, 4:20, drop = FALSE]
+
+  stopifnot(ncol(x) == 17, !anyNA(x))
+
+  outcomes <- list(
+    "Dim 1" = as.numeric(pca.res$data$x),
+    "Dim 2" = as.numeric(pca.res$data$y)
+  )
+
+  results <- list()
+  models <- list()
+
+  for (dim in names(outcomes)) {
+
+    y <- outcomes[[dim]]
+
+    # Identical CV partitions for all three models
+    set.seed(seed)
+
+    folds <- caret::createMultiFolds(
+      y, k = 5, times = 10
+    )
+
+    # Baseline: predict training-set mean
+    baseline_mae <- mean(vapply(folds, function(train_idx) {
+
+      test_idx <- setdiff(seq_along(y), train_idx)
+
+      prediction <- median(y[train_idx])
+
+      mean(abs(y[test_idx] - prediction))
+
+    }, numeric(1)))
+
+    # Compare three, four, and five components
+    for (n in c(3, 4, 5)) {
+
+      ctrl <- caret::trainControl(
+        method = "repeatedcv",
+        number = 5,
+        repeats = 10,
+        index = folds,
+        preProcOptions = list(pcaComp = n),
+        savePredictions = "final"
+      )
+
+      set.seed(seed)
+
+      fit <- caret::train(
+        x = x,
+        y = y,
+        method = "lm",
+        preProcess = c("center", "scale", "pca"),
+        trControl = ctrl,
+        metric = "MAE"
+      )
+
+      # Store fitted model
+      key <- paste(dim, n, sep = "_")
+      models[[key]] <- fit
+
+      # Store performance
+      results[[key]] <- data.frame(
+        Dimension = dim,
+        PCs = n,
+        Model_MAE = fit$results$MAE[1],
+        Baseline_MAE = baseline_mae,
+        Improvement = baseline_mae - fit$results$MAE[1]
+      )
+    }
+  }
+
+  return(list(
+    comparison = do.call(rbind, results),
+    models = models
+  ))
+}
+
+
+# ============================================================
+# Run both experiments
+# ============================================================
+
+pc_sens_exp1 <- checkPCcount(wl_pca, af)
+pc_sens_exp2 <- checkPCcount(nl_pca, af)
+
+
+# ============================================================
+# Combined comparison table
+# ============================================================
+
+pc_sensitivity <- rbind(
+  transform(pc_sens_exp1$comparison, Experiment = "Exp 1"),
+  transform(pc_sens_exp2$comparison, Experiment = "Exp 2")
+)
+
+pc_sensitivity <- pc_sensitivity[
+  , c("Experiment", "Dimension", "PCs",
+      "Model_MAE", "Baseline_MAE", "Improvement")
+]
+
+rownames(pc_sensitivity) <- NULL
+
+print(pc_sensitivity, row.names = FALSE)
+```
+
+
+# Pub-ready Supplemental Info
+
+```{r}
+
+# ============================================================
+# SUPPLEMENTARY TABLE S1
+# PCA sensitivity and median-prediction baseline
+# ============================================================
+
+# Save new outputs in a separate folder
+report_dir <- here("figures_rev", "foldwise_PCA_reporting")
+dir.create(report_dir, recursive = TRUE, showWarnings = FALSE)
+
+# 1. Reshape existing results into condensed format
+
+s1_data <- pc_sensitivity %>%
+  select(Experiment, Dimension, PCs, Model_MAE, Baseline_MAE) %>%
+  mutate(PCs = paste0("PC", PCs)) %>%
+  pivot_wider(
+    id_cols = c(Experiment, Dimension, Baseline_MAE),
+    names_from = PCs,
+    values_from = Model_MAE
+  ) %>%
+  arrange(Experiment, Dimension) %>%
+  transmute(
+    Experiment,
+    Dimension,
+    `3 PCs` = sprintf("%.3f", PC3),
+    `4 PCs` = sprintf("%.3f", PC4),
+    `5 PCs` = sprintf("%.3f", PC5),
+    `Median baseline` = sprintf("%.3f", Baseline_MAE)
+  )
+
+# 2. Create APA-style table
+
+tableS1 <- flextable(s1_data) %>%
+  theme_booktabs() %>%
+  font(fontname = "Times New Roman", part = "all") %>%
+  fontsize(size = 10, part = "all") %>%
+  align(align = "center", part = "all") %>%
+  align(j = c("Experiment", "Dimension"),
+        align = "left", part = "all") %>%
+  bold(j = "4 PCs", part = "header") %>%
+  autofit()
+
+# 3. Add table note
+
+tableS1 <- add_footer_lines(
+  tableS1,
+  values = paste(
+    "Note. Values represent mean absolute error (MAE);",
+    "lower values indicate better predictive performance.",
+    "Models were evaluated using repeated 5-fold cross-validation",
+    "(10 repetitions), with feature standardization and PCA",
+    "performed independently within each training fold.",
+    "The baseline predicts the median behavioral coordinate",
+    "of the training stimuli.",
+    "Four components were retained in the primary analysis."
+  )
+)
+
+tableS1 <- italic(tableS1, part = "footer") %>%
+  align(align = "left", part = "footer") %>%
+  autofit()
+
+# 4. Display in notebook
+
+tableS1
+
+# 5. Export to Word (separate file; original tables untouched)
+
+dir.create(
+  "foldwise_PCA_reporting",
+  showWarnings = FALSE
+)
+
+save_as_docx(
+  values = list(
+    "Table S1. Sensitivity of Cross-Validated Prediction Error to the Number of Acoustic Principal Components" = tableS1
+  ),
+  path = file.path(
+    "foldwise_PCA_reporting",
+    "Table_S1_PC_sensitivity.docx"
+  )
+)
+```
+
+
+Sensitivity analysis
+```{r}
+
+# ============================================================
+# Fold-wise PCA and sensitivity analyses
+#
+# Requires:
+#   modelRes12, modelRes34 (original full-sample regressions)
+#   pc_sensitivity        (corrected 3/4/5-PC analysis)
+#
+# ============================================================
+
+# Save new outputs in a separate folder
+report_dir <- here("figures_rev", "foldwise_PCA_reporting")
+dir.create(report_dir, recursive = TRUE, showWarnings = FALSE)
+
+
+# ------------------------------------------------------------
+# 1. Formatting helper
+# ------------------------------------------------------------
+
+make_apa_flex <- function(data, note = NULL) {
+
+  ft <- flextable(data)
+
+  ft <- theme_booktabs(ft)
+
+  ft <- font(
+    ft, fontname = "Times New Roman", part = "all"
+  )
+
+  ft <- fontsize(ft, size = 9, part = "all")
+
+  ft <- align(
+    ft, align = "center", part = "all"
+  )
+
+  ft <- align(
+    ft, j = 1, align = "left", part = "all"
+  )
+
+  ft <- autofit(ft)
+
+  if (!is.null(note)) {
+    ft <- add_footer_lines(ft, values = note)
+    ft <- italic(ft, part = "footer")
+    ft <- align(
+      ft, align = "left", part = "footer"
+    )
+  }
+
+  return(ft)
+}
+
+
+# ------------------------------------------------------------
+# 2. Retrieve corrected MAE for each four-PC model
+# ------------------------------------------------------------
+
+get_corrected_mae <- function(exp, dim) {
+
+  row <- subset(
+    pc_sensitivity,
+    Experiment == exp &
+      Dimension == dim &
+      PCs == 4
+  )
+
+  stopifnot(nrow(row) == 1)
+
+  return(row$Model_MAE)
+}
+
+
+# ------------------------------------------------------------
+# 3. Generate APA regression table with corrected CV MAE
+# ------------------------------------------------------------
+
+make_regression_table <- function(model, exp, dim,
+                                  table_num, seed) {
+
+  mae <- get_corrected_mae(exp, dim)
+
+  # Preserve original APA regression statistics and
+  # bootstrap confidence intervals
+  set.seed(seed)
+
+  tab <- apa.reg.boot.table(
+    model,
+    table.number = table_num,
+    number.samples = 1000
+  )
+
+  # Add corrected CV MAE to the model-fit section
+  body <- tab$table_body
+
+  fit_col <- ncol(body)
+
+  # Last nonempty Fit row contains the R-squared CI
+  fit_rows <- which(
+    nzchar(trimws(as.character(body[, fit_col])))
+  )
+
+  stopifnot(length(fit_rows) > 0)
+
+  fit_row <- tail(fit_rows, 1)
+
+  body[fit_row, fit_col] <- paste0(
+    body[fit_row, fit_col],
+    "; CV MAE = ",
+    sprintf("%.3f", mae)
+  )
+
+  tab$table_body <- body
+
+  # Print APA output in R
+  print(tab)
+
+  # Convert to Word-compatible table
+  df <- as.data.frame(
+    tab$table_body,
+    check.names = FALSE,
+    stringsAsFactors = FALSE
+  )
+
+  note <- paste(
+    "Note. Regression coefficients and R-squared are",
+    "based on the full stimulus set.",
+    "CV MAE is the mean absolute error from repeated",
+    "5-fold cross-validation (10 repetitions), with",
+    "standardization and four-component acoustic PCA",
+    "fitted independently within each training fold."
+  )
+
+  return(make_apa_flex(df, note))
+}
+
+
+# ------------------------------------------------------------
+# 4. MAIN MANUSCRIPT: Tables 2A-D
+# ------------------------------------------------------------
+
+table2A <- make_regression_table(
+  modelRes12[[1]], "Exp 1", "Dim 1", 2, 123
+)
+
+table2B <- make_regression_table(
+  modelRes12[[2]], "Exp 1", "Dim 2", 2, 124
+)
+
+table2C <- make_regression_table(
+  modelRes34[[1]], "Exp 2", "Dim 1", 2, 125
+)
+
+table2D <- make_regression_table(
+  modelRes34[[2]], "Exp 2", "Dim 2", 2, 126
+)
+
+
+# Export all four tables to Word
+main_tables <- list(
+  "Table 2A. Experiment 1, Dimension 1" = table2A,
+  "Table 2B. Experiment 1, Dimension 2" = table2B,
+  "Table 2C. Experiment 2, Dimension 1" = table2C,
+  "Table 2D. Experiment 2, Dimension 2" = table2D
+)
+
+save_as_docx(
+  values = main_tables,
+  path = file.path(
+    report_dir, "Table2_ABCD_foldwise_PCA.docx"
+  ),
+  pr_section = prop_section(
+    page_size = page_size(orient = "landscape")
+  )
+)
+
+
+# ------------------------------------------------------------
+# 5. SUPPLEMENT: PCA sensitivity and median baseline
+# ------------------------------------------------------------
+
+supp <- pc_sensitivity
+
+# Percentage reduction relative to median baseline
+supp$Reduction_pct <- 100 * (
+  supp$Baseline_MAE - supp$Model_MAE
+) / supp$Baseline_MAE
+
+# Create clean reporting table
+supp_table <- data.frame(
+  Experiment = supp$Experiment,
+  Dimension = supp$Dimension,
+  PCs = supp$PCs,
+  "Model MAE" = sprintf("%.3f", supp$Model_MAE),
+  "Baseline MAE" = sprintf("%.3f", supp$Baseline_MAE),
+  "MAE reduction" = sprintf("%.3f", supp$Improvement),
+  "Reduction (%)" = sprintf("%.1f", supp$Reduction_pct),
+  check.names = FALSE
+)
+
+supp_note <- paste(
+  "Note. All models used repeated 5-fold",
+  "cross-validation (10 repetitions), with",
+  "standardization and PCA fitted within each",
+  "training fold. The baseline predicts the median",
+  "behavioral coordinate of the training stimuli.",
+  "Positive reductions indicate better predictive",
+  "performance than the baseline.",
+  "The four-component model was the primary analysis."
+)
+
+tableS1 <- make_apa_flex(
+  supp_table,
+  note = supp_note
+)
+
+# Emphasize primary four-PC models
+tableS1 <- bold(
+  tableS1,
+  i = which(supp_table$PCs == 4),
+  part = "body"
+)
+
+# Print in R Markdown
+tableS1
+
+# Export to Word
+save_as_docx(
+  values = list(
+    "Table S1. PCA sensitivity and predictive performance" =
+      tableS1
+  ),
+  path = file.path(
+    report_dir, "TableS1_PC_sensitivity.docx"
+  )
+)
+
+
+# ------------------------------------------------------------
+# 6. Original vs. corrected CV
+# ------------------------------------------------------------
+
+# Uses the comparison calculated in earlier analysis.
+# Only MAE and RMSE are reported (not caret's R-squared).
+
+if (exists("cv_comparison")) {
+
+  cv_table <- data.frame(
+    Experiment = cv_comparison$Experiment,
+    Dimension = cv_comparison$Dimension,
+    Method = cv_comparison$Method,
+    MAE = sprintf("%.3f", cv_comparison$MAE),
+    RMSE = sprintf("%.3f", cv_comparison$RMSE)
+  )
+
+  tableS2 <- make_apa_flex(
+    cv_table,
+    note = paste(
+      "Note. Original PCA was fitted to all stimuli",
+      "before cross-validation. Fold-wise PCA was",
+      "fitted independently within each training fold.",
+      "Both approaches used identical cross-validation",
+      "partitions and four acoustic components."
+    )
+  )
+
+  tableS2
+
+  save_as_docx(
+    values = list(
+      "Table S2. Comparison of PCA validation procedures" =
+        tableS2
+    ),
+    path = file.path(
+      report_dir, "TableS2_PCA_validation_comparison.docx"
+    )
+  )
+}
+
+
+# ------------------------------------------------------------
+# 7. Print location of generated outputs
+# ------------------------------------------------------------
+
+cat("\nTables saved to:\n", report_dir, "\n")
+```
+
