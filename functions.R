@@ -107,45 +107,6 @@ get_dendro = function(dm){
 
 
 
-
-# # Function for modeling acoustic features in relation to pca dimensions
-# # Input: results of pca and table of acoustic features
-# # Output: linear model results 
-# getModelRes = function(pca.res, af){
-#  
-#   # Get all data into one table
-#   pcadata = data.frame(pca.res$data$name, pca.res$data$x, pca.res$data$y, pca.res$data$coord) 
-#   forlm = inner_join(pcadata, af, by = c("pca.res.data.name" = "stim"))
-#   
-#   # dim 1
-#   # regresx = lm(pca.res.data.x ~ intensity_mean + intensity_meanDiff_betweenNotes + timbre_mean + IOI_mean + ratio_mean + pulseClarity + ampModSpectrum_peak, 
-#   #              data = forlm)
-#   
-#   regresx = lm(pca.res.data.x ~ intensity_mean + intensity_meanDiff_betweenNotes + timbre_mean + IOI_mean + IOI_meanDiff_betweenNotes + ratio_mean + pulseClarity + ampModSpectrum_peak, 
-#                data = forlm)
-#   
-#   print(summary(regresx))
-#   print(car::vif(regresx))
-#   print(tab_model(regresx, show.fstat=TRUE, show.obs=TRUE, pred.labels =
-#               c("(Intercept)",  "intensity (mean)", "intensity (difference)", "timbre (mean)", "IOI (mean)", "IOI (difference)", "ratio (mean)", "pulse clarity", "Amp. mod. spectrum peak"),
-#             dv.labels = "Dim. 1 position"))
-# 
-#   
-#   # #dim 2
-#   # regresy = lm(pca.res.data.y ~ intensity_mean + intensity_meanDiff_betweenNotes + timbre_mean + IOI_mean + IOI_meanDiff_betweenNotes + ratio_mean + pulseClarity + ampModSpectrum_peak,
-#   #              data = forlm)
-#   # print(summary(regresy))
-#   # print(car::vif(regresy))
-#   # print(tab_model(regresy, show.fstat=TRUE, show.obs=TRUE, pred.labels =
-#   #             c("(Intercept)", "intensity (mean)", "intensity (difference)", "timbre (mean)", "IOI (mean)", "IOI (difference)", "ratio (mean)", "pulse clarity", "Amp. mod. spectrum peak"),
-#   #           dv.labels = "Dim. 2 position"))
-# 
-# 
-#   # return res x and y TODO
-#   
-# }
-
-
 # Function for modeling acoustic features in relation to behavioural and acoustic pca dimensions
 # Input: results of both pcas
 # Output: linear model results 
