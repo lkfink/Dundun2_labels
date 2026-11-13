@@ -1,7 +1,7 @@
 # Dundun2_labels
 Code to accompany the paper: 
 
-> Fink, L., Hörster, M., Poeppel, D., Wald-Fuhrmann, E., & Larrouy-Maestri, P. (2026). Reverse-engineering speech and music categorization from a single sound source. Retrieved from [psyarxiv.com/2635u](psyarxiv.com/2635u)
+> Fink, L., Hörster, M., Poeppel, D., Wald-Fuhrmann, E., & Larrouy-Maestri, P. (2026). Reverse-engineering speech and music categorization from a single sound source. *Attention, Perception & Psychophysics* DOI forthcoming. Preprint: [psyarxiv.com/2635u](psyarxiv.com/2635u)
 
 ## Abstract
 Classifying whether an auditory signal is music or speech is important for both humans and computational systems. Although
@@ -29,9 +29,9 @@ This script will produce all figures and statistical analyses found in the actua
 It relies on the packages listed in `dependencies.R` and the custom functions in `functions.r`. As long as you do not change the directory structure of this repository, the *here()* function called in the main script will load all dependencies and the data located in the `data` directory. 
 
 The `acousticAnalyses` folder contains the MATLAB code to extract features from the dundun recordings. It relies on the MDRQA.m helper function (also included). Additionally, the MIR, Audio System, and Signal Processing toolboxes are required.
-Stimuli for this project are not publicly available. This script is provided for reference only. 
+Stimuli for this project are not publicly available. These scripts are provided for reference only. 
 
-The `Supplemental` folder contains analyses added at the request of reviewers and included in the Supplemental Information of the manuscript. 
+The `supplemental` folder contains analyses added at the request of reviewers and included in the Supplemental Information of the manuscript. One figure, related to the new FAST analysis is in the main text of the manuscript. These scripts should be reproducible and likewise rely on the here package for relative file paths. 
 
 
 
